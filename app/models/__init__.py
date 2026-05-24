@@ -1,0 +1,11 @@
+from app.models.feedback import Feedback as Feedback
+from app.models.job import Job as Job
+from app.models.mastery import MasteryProfile as MasteryProfile
+from app.models.quiz import QuizAttempt as QuizAttempt
+from app.models.quiz import QuizQuestion as QuizQuestion
+from app.models.session import Message as Message
+from app.models.session import Session as Session
+from app.models.topic import Topic as Topic
+from app.models.user import User as User
+from app.models.user import UserPreference as UserPreference
+from app.models.user_document import UserDocument as UserDocument

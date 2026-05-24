@@ -41,7 +41,7 @@ notebooks/.ipynb_checkpoints/
 *.pth
 *.pkl
 *.safetensors
-models/
+/models/
 
 # ── DSPy compiled outputs (checked in intentionally, so excluded here)
 # app/agents/dspy_optimized_quiz.json  ← keep this one, it's small + useful
