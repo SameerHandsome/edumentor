@@ -1,11 +1,11 @@
 # Web framework
-fastapi==0.115.0
+fastapi==0.136.1
 uvicorn[standard]==0.32.0
 python-multipart==0.0.12
 httpx==0.27.2
 
 # Database
-sqlalchemy[asyncio]>=2.0.0,<2.0.36
+sqlalchemy[asyncio]==2.0.35
 asyncpg==0.30.0
 psycopg2-binary==2.9.10
 alembic==1.14.0
@@ -16,8 +16,8 @@ bcrypt==4.0.1
 passlib==1.7.4
 
 # Settings
-pydantic==2.10.0
-pydantic-settings>=2.14.0
+pydantic==2.13.3
+pydantic-settings==2.14.0
 
 # Redis
 redis[hiredis]==5.2.0
@@ -27,13 +27,14 @@ celery[librabbitmq]==5.4.0
 flower==2.0.1
 
 # LangChain 1.x Ecosystem (Production Stable)
-langchain>=1.2.15
-langchain-community>=0.4.1
-langchain-core>=1.3.0
-langchain-ollama>=1.1.0
-langchain-openai>=1.0.0
-langgraph>=1.1.9
-langsmith>=0.7.34
+langchain==1.2.15
+langchain-community==0.4.1
+langchain-core==1.3.0
+langchain-ollama==1.1.0
+langchain-openai==1.2.0
+langchain-experimental==0.4.1
+langgraph==1.1.9
+langsmith==0.7.34
 
 # Qdrant
 qdrant-client==1.12.1
@@ -66,9 +67,8 @@ ragas==0.2.6
 datasets==3.1.0
 wandb==0.18.7
 
-langchain-experimental-0.4.1 
-pymupdf-1.27.2.3 
-pymupdf4llm-1.27.2.3 
-pymupdf_layout-1.27.2.3 
-tabulate-0.10.0 
-tavily-python-0.7.23
+# Document processing
+PyMuPDF==1.24.14
+pymupdf4llm==0.0.17
+tabulate==0.10.0
+tavily-python==0.7.23
