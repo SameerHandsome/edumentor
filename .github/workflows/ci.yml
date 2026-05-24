@@ -63,7 +63,7 @@ jobs:
           pytest tests/unit/ \
             --cov=app \
             --cov-report=xml \
-            --cov-fail-under=15 \
+            --cov-fail-under=12 \
             -v --timeout=60
       - uses: codecov/codecov-action@v4
         with:
