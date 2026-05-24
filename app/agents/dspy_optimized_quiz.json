@@ -1,0 +1,135 @@
+{
+  "self": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "topic": "Python basics",
+        "theta": "-0.50",
+        "b_target": "-0.30",
+        "reasoning": "Not supplied for this particular example.",
+        "question": "Which of these is a data type in Python?",
+        "choice_a": "string (str)",
+        "choice_b": "integer (int)",
+        "choice_c": "tuple ()",
+        "choice_d": "float 3.5678901234e-01",
+        "correct": "B",
+        "explanation": "A tuple is a sequence of immutable Python objects, but it also has the ability to store other sequences and collections (such as lists) within itself; tuples are often used for this reason. The term 'tuple' refers both to an object that can contain these nested structures or even more complex data types such as dictionaries and sets\u2014which makes them ideal when working with large amounts of information at once!"
+      },
+      {
+        "augmented": true,
+        "topic": "Python lists",
+        "theta": "0.30",
+        "b_target": "0.50",
+        "reasoning": "Not supplied for this particular example.",
+        "question": "What is the result of `[1, 2] + [3, 4]` in Python?",
+        "choice_a": "`[1, 2, '3', '4']` (string concatenation)",
+        "choice_b": "`['1','2','3','4']` (list of strings)",
+        "choice_c": "`'<class \\'int\\'>'` or `'<class \\'str\\'>'` depending on the version. The latter is a bug, and should never occur in Python 3+! In fact it only occurs if you are using an older interpreter that implements this feature incorrectly (see PEP-415).\nThe former might also be seen as correct due to python2's `str()` coercion of int objects. However a string cannot concatenate with any other type, so the result is always `'<class \\'int\\'>'` or `<string>`. Note that there are no spaces in these strings!",
+        "choice_d": "`[1234]` (integer) This option has been deprecated and removed from Python 3.x+ since it can lead to unexpected results when performing arithmetic operations on lists of integers, e.-g `[0] * x + [y]`. Use `int()` instead for converting a list containing only one integer into an int:",
+        "correct": "B",
+        "explanation": "The answer is A - string concatenation with the plus sign (+). Note that this also works in Python 3.x+ due to implicit conversion of strings and integers, but it's not recommended as a good practice.\nEnd of explanation note"
+      }
+    ],
+    "signature": {
+      "instructions": "Generate a multiple-choice quiz question at a specific IRT difficulty level.",
+      "fields": [
+        {
+          "prefix": "Topic:",
+          "description": "The topic for the question"
+        },
+        {
+          "prefix": "Theta:",
+          "description": "Student ability as IRT theta float, e.g. '0.50'"
+        },
+        {
+          "prefix": "B Target:",
+          "description": "Target difficulty b-parameter float, e.g. '0.70'"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Question:",
+          "description": "Question text"
+        },
+        {
+          "prefix": "Choice A:",
+          "description": "Choice A"
+        },
+        {
+          "prefix": "Choice B:",
+          "description": "Choice B"
+        },
+        {
+          "prefix": "Choice C:",
+          "description": "Choice C"
+        },
+        {
+          "prefix": "Choice D:",
+          "description": "Choice D"
+        },
+        {
+          "prefix": "Correct:",
+          "description": "Correct answer letter: A, B, C, or D"
+        },
+        {
+          "prefix": "Explanation:",
+          "description": "Brief explanation of the correct answer"
+        }
+      ]
+    },
+    "extended_signature": {
+      "instructions": "Generate a multiple-choice quiz question at a specific IRT difficulty level.",
+      "fields": [
+        {
+          "prefix": "Topic:",
+          "description": "The topic for the question"
+        },
+        {
+          "prefix": "Theta:",
+          "description": "Student ability as IRT theta float, e.g. '0.50'"
+        },
+        {
+          "prefix": "B Target:",
+          "description": "Target difficulty b-parameter float, e.g. '0.70'"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Question:",
+          "description": "Question text"
+        },
+        {
+          "prefix": "Choice A:",
+          "description": "Choice A"
+        },
+        {
+          "prefix": "Choice B:",
+          "description": "Choice B"
+        },
+        {
+          "prefix": "Choice C:",
+          "description": "Choice C"
+        },
+        {
+          "prefix": "Choice D:",
+          "description": "Choice D"
+        },
+        {
+          "prefix": "Correct:",
+          "description": "Correct answer letter: A, B, C, or D"
+        },
+        {
+          "prefix": "Explanation:",
+          "description": "Brief explanation of the correct answer"
+        }
+      ]
+    }
+  }
+}

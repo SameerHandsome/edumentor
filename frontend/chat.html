@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduMentor — Chat</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+</head>
+<body>
+
+<div class="chat-layout" id="app">
+  <!-- Sidebar injected by chat.js -->
+  <div class="chat-main">
+
+    <!-- Topbar -->
+    <div class="chat-topbar">
+      <div class="chat-topic-info">
+        <span>💬</span>
+        <div>
+          <div class="chat-topic-name" id="chat-title">Chat</div>
+          <div class="chat-topic-subtitle" id="chat-subtitle">AI Tutor</div>
+        </div>
+      </div>
+      <div class="chat-actions">
+        <button class="btn-icon" title="Upload document"
+                onclick="document.getElementById('doc-upload').click()">📎</button>
+        <input type="file" id="doc-upload" accept=".txt,.pdf,.md"
+               style="display:none" onchange="uploadDoc(this)" />
+        <button class="btn btn-danger btn-sm" onclick="endSession()">End Session</button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages-area" id="messages-area">
+      <div id="chat-empty" class="chat-empty">
+        <div class="empty-icon">🎓</div>
+        <h3>Start a conversation</h3>
+        <p>Ask anything about your topic, or let the AI tutor guide you.</p>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+      <div class="input-toolbar">
+        <span class="voice-status" id="voice-status">🔴 Recording…</span>
+      </div>
+      <div class="input-row">
+        <textarea
+          class="msg-input"
+          id="msg-input"
+          placeholder="Type your message… (Enter to send, Shift+Enter for newline)"
+          rows="1"
+          onkeydown="handleInputKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <button class="btn-icon mic-btn" id="mic-btn"
+                title="Voice input" onclick="toggleVoice()">🎤</button>
+        <button class="btn btn-primary" id="send-btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Topic picker modal -->
+<div id="topic-modal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <h3>Select a Topic</h3>
+    <p>The quiz requires a topic. Please select one to continue.</p>
+    <div class="topic-pick-list" id="topic-pick-list"></div>
+    <button class="btn btn-ghost btn-sm" style="margin-top:12px"
+            onclick="document.getElementById('topic-modal').style.display='none'">Cancel</button>
+  </div>
+</div>
+<script src="js/api.js"></script>
+<script src="js/chat.js"></script>
+</body>
+</html>

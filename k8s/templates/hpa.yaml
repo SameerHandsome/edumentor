@@ -1,0 +1,43 @@
+# HPA for API pods — scales on CPU utilisation
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: edumentor-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: edumentor-api
+  minReplicas: {{ .Values.hpa.api.minReplicas }}
+  maxReplicas: {{ .Values.hpa.api.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.hpa.api.targetCPUUtilizationPercentage }}
+---
+# HPA for Celery workers — scales on RabbitMQ queue depth
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: edumentor-celery-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: edumentor-celery-worker
+  minReplicas: {{ .Values.hpa.celeryWorker.minReplicas }}
+  maxReplicas: {{ .Values.hpa.celeryWorker.maxReplicas }}
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: rabbitmq_queue_messages_ready
+          selector:
+            matchLabels:
+              queue: voice
+        target:
+          type: AverageValue
+          averageValue: {{ .Values.hpa.celeryWorker.targetQueueLength }}

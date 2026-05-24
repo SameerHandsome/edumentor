@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edumentor-celery-worker
+  labels:
+    app: edumentor-celery-worker
+spec:
+  replicas: {{ .Values.replicaCount.celeryWorker }}
+  selector:
+    matchLabels:
+      app: edumentor-celery-worker
+  template:
+    metadata:
+      labels:
+        app: edumentor-celery-worker
+    spec:
+      containers:
+        - name: celery-worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["celery", "-A", "app.tasks.celery_app", "worker",
+                    "-Q", "voice,quiz,session,mlops",
+                    "--concurrency=4", "--loglevel=info"]
+          envFrom:
+            - secretRef:
+                name: edumentor-secrets
+          resources:
+            requests:
+              cpu: {{ .Values.resources.celeryWorker.requests.cpu }}
+              memory: {{ .Values.resources.celeryWorker.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.celeryWorker.limits.cpu }}
+              memory: {{ .Values.resources.celeryWorker.limits.memory }}

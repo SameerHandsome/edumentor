@@ -1,0 +1,121 @@
+version: "3.9"
+
+# =============================================================================
+# EduMentor — docker-compose.yml
+#
+# Local services (managed here):
+#   nginx, api, celery-worker, celery-beat, celery-flower, prometheus, grafana
+# =============================================================================
+
+services:
+
+  # ── Nginx reverse proxy ────────────────────────────────────────────────────
+  # Entry point for ALL external traffic.
+  # api:8000 is NOT exposed publicly — only reachable through nginx.
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"         # HTTP → redirects to HTTPS
+      - "443:443"       # HTTPS → proxies to api:8000
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro     # cert.pem + key.pem (see nginx.conf footer)
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── FastAPI application ────────────────────────────────────────────────────
+  api:
+    build: .
+    expose:
+      - "8000"            # internal only — nginx proxies to this
+    env_file: .env
+    volumes:
+      - ./assets:/app/assets:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s   # give FastAPI time to init LangGraph + connect to cloud services
+    restart: unless-stopped
+
+  # ── Celery worker ──────────────────────────────────────────────────────────
+  # Processes 4 queues: voice, quiz, session, mlops
+  celery-worker:
+    build: .
+    command: >
+      celery -A app.tasks.celery_app worker
+      -Q voice,quiz,session,mlops
+      --concurrency=4
+      --loglevel=info
+    env_file: .env
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "celery", "-A", "app.tasks.celery_app", "inspect", "ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  # ── Celery beat scheduler ──────────────────────────────────────────────────
+  # Runs scheduled tasks: drift detection + DPO export (both weekly).
+  # Never run more than ONE instance of beat.
+  celery-beat:
+    build: .
+    command: celery -A app.tasks.celery_app beat --loglevel=info
+    env_file: .env
+    depends_on:
+      celery-worker:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Celery Flower dashboard ────────────────────────────────────────────────
+  # Task monitoring UI at http://localhost:5555
+  # Bound to 127.0.0.1 — not publicly accessible.
+  celery-flower:
+    build: .
+    command: celery -A app.tasks.celery_app flower --port=5555
+    ports:
+      - "127.0.0.1:5555:5555"
+    env_file: .env
+    depends_on:
+      celery-worker:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Prometheus metrics scraper ─────────────────────────────────────────────
+  # Scrapes FastAPI /admin/metrics endpoint.
+  # Bound to 127.0.0.1 — not publicly accessible.
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+
+  # ── Grafana dashboard ──────────────────────────────────────────────────────
+  # Visualizes Prometheus metrics.
+  # Bound to 127.0.0.1 — not publicly accessible.
+  grafana:
+    image: grafana/grafana:11.3.0
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-edumentor}  # set in .env to override
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+# =============================================================================
+volumes:
+  prometheus_data:
+  grafana_data:

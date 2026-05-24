@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduMentor — Profile</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/profile.css" />
+</head>
+<body>
+
+<div class="app-layout" id="app">
+  <!-- Sidebar injected by profile.js -->
+  <div class="main-content">
+
+    <div class="topbar">
+      <span class="topbar-title">Profile &amp; Settings</span>
+    </div>
+
+    <div class="page-body">
+      <div class="profile-grid">
+
+        <!-- Left: Edit form -->
+        <div>
+          <div class="card">
+            <!-- Avatar + name header -->
+            <div class="profile-card-header">
+              <div class="profile-avatar" id="profile-avatar">…</div>
+              <div>
+                <div class="profile-name-display"  id="display-name">Loading…</div>
+                <div class="profile-email-display" id="display-email">—</div>
+              </div>
+            </div>
+
+            <!-- Inline save feedback -->
+            <div id="save-feedback" class="save-feedback">✅ Profile updated</div>
+
+            <!-- Personal -->
+            <p class="form-section-title">Personal</p>
+            <div class="form-group">
+              <label class="form-label" for="field-name">Full Name</label>
+              <input class="form-input" type="text" id="field-name" placeholder="Your full name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="field-email">Email</label>
+              <input class="form-input" type="email" id="field-email" readonly
+                     style="background:var(--color-bg);cursor:not-allowed" />
+            </div>
+
+            <!-- Learning preferences -->
+            <p class="form-section-title">Learning Preferences</p>
+            <div class="form-group">
+              <label class="form-label" for="field-style">Explanation Style</label>
+              <select class="form-select" id="field-style">
+                <option value="step_by_step">Step by Step</option>
+                <option value="visual">Visual</option>
+                <option value="concise">Concise</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="field-goal">Session Goal</label>
+              <input class="form-input" type="text" id="field-goal"
+                     placeholder="e.g. Master algebra by next month" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="field-weak">
+                Weak Topics
+                <span style="font-weight:400;color:var(--color-text-muted)">(comma-separated)</span>
+              </label>
+              <input class="form-input" type="text" id="field-weak"
+                     placeholder="e.g. Calculus, Thermodynamics" />
+            </div>
+
+            <button class="btn btn-primary btn-full" id="save-btn" onclick="saveProfile()">
+              Save Changes
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Mastery table -->
+        <div>
+          <div class="card">
+            <div class="section-header">
+              <h2 class="section-title">📊 Topic Mastery</h2>
+            </div>
+            <div class="mastery-table-wrap">
+              <div id="mastery-loading" class="mastery-loading">
+                <div class="spinner" style="margin:0 auto 10px"></div>
+                Loading mastery data…
+              </div>
+              <table id="mastery-table" style="display:none">
+                <thead>
+                  <tr>
+                    <th>Topic</th>
+                    <th>Skill Level</th>
+                    <th>Attempts</th>
+                    <th>Correct</th>
+                    <th>Accuracy</th>
+                  </tr>
+                </thead>
+                <tbody id="mastery-body"></tbody>
+              </table>
+              <div id="mastery-empty" class="mastery-empty" style="display:none">
+                No mastery data yet. Take a quiz to see your progress!
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/api.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

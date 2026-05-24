@@ -1,0 +1,14 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "edumentor-api"
+    static_configs:
+      - targets: ["api:9090"]
+    metrics_path: /mlops/admin/metrics
+
+  - job_name: "celery"
+    static_configs:
+      - targets: ["celery-flower:5555"]
+    metrics_path: /metrics

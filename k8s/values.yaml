@@ -1,0 +1,61 @@
+# EduMentor Helm values
+# Real secret values are NEVER stored here.
+# Pass them at deploy time:
+#   helm upgrade --install edumentor ./k8s --set secrets.DATABASE_URL="..."
+# Or via a values override file that is gitignored.
+
+replicaCount:
+  api: 2
+  celeryWorker: 2
+
+image:
+  repository: sameerhandsome12/edumentor
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: true
+  className: nginx
+  host: edumentor.example.com
+
+resources:
+  api:
+    requests: { cpu: "500m", memory: "512Mi" }
+    limits:   { cpu: "2000m", memory: "2Gi" }
+  celeryWorker:
+    requests: { cpu: "250m", memory: "256Mi" }
+    limits:   { cpu: "1000m", memory: "1Gi" }
+
+hpa:
+  api:
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 70
+  celeryWorker:
+    minReplicas: 2
+    maxReplicas: 10
+    targetQueueLength: 10
+
+probes:
+  liveness: /health
+  readiness: /health
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+# Secret keys — all empty here on purpose, injected by CI via --set
+secrets:
+  DATABASE_URL: ""
+  SYNC_DATABASE_URL: ""
+  REDIS_URL: ""
+  REDIS_TOKEN: ""
+  QDRANT_URL: ""
+  QDRANT_API_KEY: ""
+  JWT_SECRET: ""
+  CELERY_BROKER_URL: ""
+  CELERY_RESULT_BACKEND: ""
+  LANGSMITH_API_KEY: ""
+  GROQ_API_KEY: ""

@@ -1,0 +1,32 @@
+# Your fine-tuned GGUF — adjust filename to match what you downloaded
+FROM ./models/phi-3.5-mini-instruct.Q4_K_M.gguf
+
+# Chat template for phi3.5 — this tells Ollama how to format messages
+TEMPLATE """<|system|>
+{{ .System }}<|end|>
+<|user|>
+{{ .Prompt }}<|end|>
+<|assistant|>
+"""
+
+# Baked-in persona — the 8-layer prompt in assembly.py extends this at runtime
+SYSTEM """You are EduMentor, a Socratic AI tutor.
+
+Core rules:
+- NEVER give direct answers — always guide with questions and hints
+- Adapt to the student's level and explanation style provided in context
+- Acknowledge emotions before responding ("That's a tough one!")
+- Keep voice responses under 4 sentences
+- Always respond in the language specified in the context"""
+
+# Generation parameters — match what agents use in config
+PARAMETER temperature 0.7
+PARAMETER num_predict 512
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.1
+PARAMETER num_ctx 4096
+
+# Stop tokens for phi3.5
+PARAMETER stop "<|end|>"
+PARAMETER stop "<|user|>"
+PARAMETER stop "<|assistant|>"

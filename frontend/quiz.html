@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduMentor — Quiz</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/quiz.css" />
+</head>
+<body>
+
+<div class="app-layout" id="app">
+  <!-- Sidebar injected by quiz.js -->
+  <div class="main-content">
+    <div class="quiz-main">
+
+      <!-- STATE: PICKER (shown when no topic_id in URL) -->
+      <div id="state-picker" style="display:none">
+        <div class="picker-wrap">
+          <div class="picker-header">
+            <div class="picker-icon">🎓</div>
+            <h2>Start a Quiz</h2>
+            <p>Choose a topic from your curriculum, or type a custom one.</p>
+          </div>
+
+          <!-- Custom topic input -->
+          <div class="picker-custom">
+            <label class="picker-label">Custom topic</label>
+            <div class="picker-custom-row">
+              <input
+                type="text"
+                id="custom-topic-input"
+                class="picker-input"
+                placeholder="e.g. Transformer architecture, SQL joins…"
+                onkeydown="if(event.key==='Enter'){ window._pickerTopicId=null; window._pickerTopicName=null; window._pickerTopicId=this.value.trim(); window._pickerTopicName=this.value.trim(); startPickerQuiz(); }"
+              />
+              <button class="btn btn-primary"
+                      onclick="window._pickerTopicId=document.getElementById('custom-topic-input').value.trim(); window._pickerTopicName=window._pickerTopicId; startPickerQuiz()">
+                Start →
+              </button>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="picker-divider"><span>or pick from curriculum</span></div>
+
+          <!-- Curriculum topics list -->
+          <div id="picker-topic-list" class="picker-topic-list">
+            <div class="spinner" style="margin:20px auto;width:28px;height:28px;border-width:3px"></div>
+          </div>
+
+          <!-- Selected topic name (shown after picking) -->
+          <div id="picker-topic-name" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- STATE: LOADING -->
+      <div id="state-loading" style="display:none">
+        <div class="spinner"></div>
+        <h3>Generating your quiz…</h3>
+        <p>Picking the best questions for your skill level.</p>
+      </div>
+
+      <!-- STATE: QUESTION -->
+      <div id="state-question" style="display:none">
+        <div class="quiz-topbar">
+          <div>
+            <div class="quiz-topic" id="q-topic">Topic</div>
+            <div class="quiz-progress" id="q-progress">Question 1 of 5</div>
+          </div>
+          <div class="timer-wrap">
+            <span class="timer-number" id="timer-num">30</span>
+            <div class="timer-bar-bg">
+              <div class="timer-bar-fill" id="timer-bar" style="width:100%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-card" id="quiz-card">
+          <div class="quiz-card-header">
+            <div class="difficulty-badge" id="difficulty-label">Difficulty: —</div>
+            <div class="question-text" id="question-text">Loading question…</div>
+          </div>
+          <div class="quiz-card-body">
+            <div class="choices-grid" id="choices-grid"></div>
+            <button class="skip-link" onclick="skipQuestion()">Skip this question</button>
+          </div>
+          <div id="result-section" style="display:none" class="result-section"></div>
+        </div>
+      </div>
+
+      <!-- STATE: FINISHED -->
+      <div id="state-finished" style="display:none">
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="finished-header">
+            <div class="finished-trophy" id="finish-trophy">🏆</div>
+            <h2>Quiz Complete!</h2>
+            <p id="finish-subtitle">Here's how you did</p>
+          </div>
+          <div style="padding:0 28px">
+            <div class="score-display">
+              <div class="score-item">
+                <div class="score-value" id="finish-score">—</div>
+                <div class="score-label">Score</div>
+              </div>
+              <div class="score-item">
+                <div class="score-value" id="finish-accuracy">—</div>
+                <div class="score-label">Accuracy</div>
+              </div>
+              <div class="score-item">
+                <div class="score-value" id="finish-total">—</div>
+                <div class="score-label">Questions</div>
+              </div>
+            </div>
+            <div class="question-summary" id="question-summary"></div>
+          </div>
+          <div class="finished-actions">
+            <button class="btn btn-primary" onclick="location.reload()">Try Again</button>
+            <a href="dashboard.html" class="btn btn-ghost">Back to Dashboard</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="js/api.js"></script>
+<script src="js/quiz.js"></script>
+</body>
+</html>

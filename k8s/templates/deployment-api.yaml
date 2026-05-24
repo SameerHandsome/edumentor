@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edumentor-api
+  labels:
+    app: edumentor-api
+spec:
+  replicas: {{ .Values.replicaCount.api }}
+  selector:
+    matchLabels:
+      app: edumentor-api
+  template:
+    metadata:
+      labels:
+        app: edumentor-api
+    spec:
+      containers:
+        - name: api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: edumentor-secrets
+          resources:
+            requests:
+              cpu: {{ .Values.resources.api.requests.cpu }}
+              memory: {{ .Values.resources.api.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.api.limits.cpu }}
+              memory: {{ .Values.resources.api.limits.memory }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.probes.liveness }}
+              port: 8000
+            initialDelaySeconds: {{ .Values.probes.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probes.readiness }}
+              port: 8000
+            initialDelaySeconds: {{ .Values.probes.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.periodSeconds }}
