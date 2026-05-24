@@ -56,6 +56,7 @@ evidently==0.4.36
 # Testing
 pytest==8.3.4
 pytest-asyncio==0.24.0
+pytest-timeout==2.3.1
 pytest-cov==6.0.0
 aiosqlite==0.20.0
 
