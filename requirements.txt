@@ -74,3 +74,4 @@ pymupdf4llm==0.0.17
 tabulate==0.10.0
 tavily-python==0.7.23
 cachetools==7.0.6
+pydantic[email]
