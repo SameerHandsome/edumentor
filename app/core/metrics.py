@@ -21,6 +21,7 @@ _FAST_BUCKETS = [0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 5.0]
 # Wrapping every definition in a get-or-create call makes registration
 # idempotent whether the module is fresh or being re-entered after a clear.
 
+
 def _histogram(name: str, doc: str, labelnames=(), buckets=None) -> Histogram:
     if name in REGISTRY._names_to_collectors:
         return REGISTRY._names_to_collectors[name]  # type: ignore[return-value]
